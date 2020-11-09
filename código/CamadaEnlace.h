@@ -20,3 +20,6 @@ void CamadadeEnlaceTransmissoraEnquadramento(int* quadro);
 // Recepção
 void CamadaDeEnlaceReceptoraEnquadramento(int* quadro);
 void CamadaEnlaceDadosReceptora(int* quadro);
+
+// Codificação
+int *CamadaDeEnlaceTransmissoraEnquadramentoContagemDeCaracteres(int *quadro);

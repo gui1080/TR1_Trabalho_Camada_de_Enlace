@@ -33,7 +33,7 @@ int find_size(int quadro[]){
 		}
 		i++;
 	}
-	
+
 	// se conta até achar o 2 retorna o tamanho
 
 	return i;
@@ -44,7 +44,7 @@ void converte(string mensagem, int quadro[], int pos)
 
 	int x, j, i;
 
-	j = ((pos * 8) - 1) + 8;	// cálculo da posição no array transformado em binário 
+	j = ((pos * 8) - 1) + 8;	// cálculo da posição no array transformado em binário
 
 	bitset<8> set(mensagem[pos]);
 
@@ -79,7 +79,7 @@ void converte(string mensagem, int quadro[], int pos)
 	return;
 }
 
-// TRANSMISSÃO 
+// TRANSMISSÃO
 //--------------------------------------------------------------------------------------------
 
 void CamadaDeAplicacaoTransmissora(string mensagem)
@@ -111,13 +111,13 @@ void CamadaDeAplicacaoTransmissora(string mensagem)
 		cout << quadro[i];
 
 	}
-	
+
 	cout << endl << endl;
 
 	quadro[tamanho_quadro_final] = 2;
 
 	// trabalho 2
-	CamadaEnlaceDadosTransmissora(quadro); 
+	CamadaEnlaceDadosTransmissora(quadro);
 
 	// trabalho 1
 	//CamadaFisicaTransmissora(quadro);
@@ -132,7 +132,7 @@ void CamadaFisicaTransmissora(int quadro[])
 
 	int i = 0;
 	int tamanho_fluxo;
-	tamanho_fluxo = find_size(quadro) * 2;  // convenção: o fluxo vai ter o dobro de quantidade de 0s e 1 por conta da codificação manchester e manchester diferencial 
+	tamanho_fluxo = find_size(quadro) * 2;  // convenção: o fluxo vai ter o dobro de quantidade de 0s e 1 por conta da codificação manchester e manchester diferencial
 
 	int *fluxoBrutoDeBits;
 
@@ -185,7 +185,7 @@ void CamadaFisicaTransmissora(int quadro[])
 
 }
 
-// CODIFICAÇÃO 
+// CODIFICAÇÃO
 //--------------------------------------------------------------------------------------------
 
 int *CamadaFisicaTransmissoraCodificacaoManchester(int quadro[])
@@ -219,7 +219,7 @@ int *CamadaFisicaTransmissoraCodificacaoManchester(int quadro[])
 			x++;
 		}
 
-		// se temos 11, vira 10 por conta do xor 
+		// se temos 11, vira 10 por conta do xor
 		if (quadro[j] == 1)
 		{
 			fluxoCodificado[x] = 1;
@@ -291,7 +291,7 @@ int *CamadaFisicaTransmissoraCodificacaoManchesterDiferencial(int quadro[])
 	// z
 	// 0  1  1  1  1  0  1  0
 	// 00 11 11 11 11 00 11 00
-	// 01 10 01 10 01 01 10 10 
+	// 01 10 01 10 01 01 10 10
 
 	// o resultado fica em termos de 01 e 10 pois se mantém a informação do clock que é 01 01 01...
 
@@ -392,7 +392,7 @@ void MeioDeComunicacao(int fluxoBrutodeBits[])
 	CamadaFisicaReceptora(fluxoBrutoDeBitsPontoB);
 }
 
-// DECODIFICAÇÃO 
+// DECODIFICAÇÃO
 //--------------------------------------------------------------------------------------------
 
 void CamadaFisicaReceptora(int quadro[])
@@ -406,7 +406,7 @@ void CamadaFisicaReceptora(int quadro[])
 	i = find_size(quadro);
 	int *fluxoBrutoDeBits;
 
-	fluxoBrutoDeBits = new (nothrow) int[i]; // alocação dinâmica 
+	fluxoBrutoDeBits = new (nothrow) int[i]; // alocação dinâmica
 
 	switch (tipoDeDecodificacao)
 	{
@@ -450,10 +450,10 @@ void CamadaFisicaReceptora(int quadro[])
 	}
 
 	//trabalho 1
-	//CamadaDeAplicacaoReceptora(fluxoBrutoDeBits); // passa a diante o fluxo decodificado 
+	//CamadaDeAplicacaoReceptora(fluxoBrutoDeBits); // passa a diante o fluxo decodificado
 
 	//trabalho 2
-	CamadaEnlaceDadosReceptora(fluxoBrutoDeBits); 
+	CamadaEnlaceDadosReceptora(fluxoBrutoDeBits);
 }
 
 int *CamadaFisicaReceptoraDecodificacaoBinaria(int quadro[])
@@ -461,7 +461,7 @@ int *CamadaFisicaReceptoraDecodificacaoBinaria(int quadro[])
 
 	// acabou que nesta camada o que deve ser decodificado já está pronto para ser um input
 	// da mudança de binário de volta para letra como o resultado final das outras
-	// decodificações 
+	// decodificações
 
 	return quadro;
 }
@@ -489,7 +489,7 @@ int *CamadaFisicaReceptoraDecodificacaoManchester(int quadro[])
 
 
 	// xor 01 e 01 = 00
-	// xor 10 e 01 = 11	
+	// xor 10 e 01 = 11
 
 	for (j = 0; j < i; j++)
 	{
@@ -600,7 +600,7 @@ int *CamadaFisicaReceptoraDecodificacaoManchesterDiferencial (int quadro[]){
 	return fluxoDecodificado;
 }
 
-// RECEPÇÃO 
+// RECEPÇÃO
 //--------------------------------------------------------------------------------------------
 
 void CamadaDeAplicacaoReceptora(int quadro[])
@@ -678,4 +678,3 @@ void AplicacaoReceptora(string mensagem)
 	// fim!
 
 }
-
