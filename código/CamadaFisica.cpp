@@ -132,7 +132,7 @@ void CamadaFisicaTransmissora(int quadro[])
 
 	int i = 0;
 	int tamanho_fluxo;
-	tamanho_fluxo = find_size(quadro) * 2;  // convenção: o fluxo vai ter o dobro de quantidade de 0s e 1 por conta da codificação manchester e manchester diferencial
+	tamanho_fluxo = ((find_size(quadro)) * 2);  // convenção: o fluxo vai ter o dobro de quantidade de 0s e 1 por conta da codificação manchester e manchester diferencial
 
 	int *fluxoBrutoDeBits;
 

@@ -15,11 +15,15 @@
 
 // Transmissão
 void CamadaEnlaceDadosTransmissora(int* quadro);
-void CamadadeEnlaceTransmissoraEnquadramento(int* quadro);
+int *CamadadeEnlaceTransmissoraEnquadramento(int* quadro);
 
 // Recepção
-void CamadaDeEnlaceReceptoraEnquadramento(int* quadro);
+int *CamadaDeEnlaceReceptoraEnquadramento(int* quadro);
 void CamadaEnlaceDadosReceptora(int* quadro);
 
 // Codificação
 int *CamadaDeEnlaceTransmissoraEnquadramentoContagemDeCaracteres(int *quadro);
+int *CamadaDeEnlaceTransmissoraEnquadramentoInsercaoDeBytes(int *quadro);
+
+// Decodificação
+int *CamadaDeEnlaceReceptoraEnquadramentoInsercaoDeBytes(int *quadro);

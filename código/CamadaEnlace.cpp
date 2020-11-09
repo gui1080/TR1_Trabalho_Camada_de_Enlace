@@ -30,15 +30,17 @@ void CamadaEnlaceDadosTransmissora (int quadro[]){
   }
   cout << endl << endl;
 
+
+  int *quadro_novo; 
   // coloca o enquadramento
-  CamadadeEnlaceTransmissoraEnquadramento(quadro);
+  quadro_novo = CamadadeEnlaceTransmissoraEnquadramento(quadro);
 
   // manda para a camada física transmissora mandar a mensagem com enquadramento
-  CamadaFisicaTransmissora(quadro);
+  CamadaFisicaTransmissora(quadro_novo);
 
 }
 
-void CamadadeEnlaceTransmissoraEnquadramento(int quadro[]){
+int *CamadadeEnlaceTransmissoraEnquadramento(int quadro[]){
 
   cout << "\033[1;35mCamada Enlace Transmissora ENQUADRAMENTO\n \033[0m\n";
 
@@ -49,7 +51,9 @@ void CamadadeEnlaceTransmissoraEnquadramento(int quadro[]){
 
   switch(tipoDeEnquadramento){
     case 0:
-    quadroEnquadrado = CamadaDeEnlaceTransmissoraEnquadramentoContagemDeCaracteres(quadro);
+    quadroEnquadrado = CamadaDeEnlaceTransmissoraEnquadramentoContagemDeCaracteres(quadro); 
+
+    printf("\n quadro enquadrado eae\n"); 
 
     size = find_size(quadroEnquadrado);
     for(i = 0; i < size; i++){
@@ -59,7 +63,8 @@ void CamadadeEnlaceTransmissoraEnquadramento(int quadro[]){
     break;
 
     case 1:
-    //quadroEnquadrado = CamadaDeEnlaceTransmissoraEnquadramentoInsercaoDeBytes(quadro);
+    quadroEnquadrado = CamadaDeEnlaceTransmissoraEnquadramentoInsercaoDeBytes(quadro);
+    
     break;
 
     case 2:
@@ -68,6 +73,131 @@ void CamadadeEnlaceTransmissoraEnquadramento(int quadro[]){
 
   }
 
+  return quadroEnquadrado; 
+
+
+}
+
+int *CamadaDeEnlaceTransmissoraEnquadramentoInsercaoDeBytes(int quadro[]){
+
+  // flag 00001111
+
+  printf("\nINSERINDO FLAG\n\n"); 
+
+  int size = find_size(quadro);
+
+
+  printf("\nquadro:\n"); 
+  for(int zap = 0; zap < size ; zap++){
+    printf("%d", quadro[zap]); 
+  }
+  printf("\n");
+
+  int tamanho_fluxo;
+
+  int flag[8] = {0,0,0,0,1,1,1,1};
+
+  int resto = ((size % 40)/8); // qntd de bytes que tem q entrar 
+
+  if(size < 40){
+    
+    tamanho_fluxo = size + 16; 
+  
+  }else if(resto == 0){
+
+    tamanho_fluxo = size + (size/40) * 16; 
+  
+  }else{
+    tamanho_fluxo = size + (((size/40) * 16) + 16);
+  }
+
+  int quantidade_total_quadros;
+  
+  if(resto == 0){
+    quantidade_total_quadros = (size/40); 
+  }
+  else{
+    quantidade_total_quadros = (size/40) + 1;
+  }
+
+  printf("tamanho do fluxo: %d / resto: %d\n / quantidade de coiso: %d", tamanho_fluxo, resto, quantidade_total_quadros); 
+
+  int *fluxoCodificado;
+  fluxoCodificado = new (nothrow) int[tamanho_fluxo];
+
+  int *vetor_aux; 
+  vetor_aux = new (nothrow) int[quantidade_total_quadros];
+
+  int i, i_aux, x, y; 
+
+
+  for(x = 0 ; x < quantidade_total_quadros ; x++){
+    if((x == quantidade_total_quadros - 1) && (resto != 0)){
+
+      vetor_aux[x] = resto; 
+
+    }else{
+
+      vetor_aux[x] = 5; 
+    
+    }
+    
+  }
+
+  printf("\n\nAUX:"); 
+  for(x = 0 ; x < quantidade_total_quadros ; x++){
+    printf("%d", vetor_aux[x]); 
+  }
+
+  i = 0; 
+  i_aux = 0; 
+  int k = 0; 
+
+  while(i < tamanho_fluxo){
+
+    for(x = 0; x < 8 ; x++){
+
+      fluxoCodificado[i+x] = flag[x]; 
+    
+    }
+
+    i = i + 8; 
+
+    for(y = 0; y < (vetor_aux[k] * 8) ; y++){
+
+      fluxoCodificado[i + y] = quadro[i_aux + y]; 
+    
+    }
+
+    i = i + (vetor_aux[k] * 8);
+    i_aux = i_aux + (vetor_aux[k] * 8);  
+
+    for(x = 0; x < 8 ; x++){
+
+      fluxoCodificado[i+x] = flag[x]; 
+    
+    }
+
+    i = i + 8;
+
+     k++; 
+
+  }
+
+  printf("\nresultado kkkk:\n"); 
+
+  for(x = 0; x < tamanho_fluxo ; x++){
+
+    printf("%d", fluxoCodificado[x]); 
+    
+  }
+
+  printf("\n\n");
+
+
+  fluxoCodificado[tamanho_fluxo] = 2; 
+
+  return fluxoCodificado;
 
 }
 
@@ -78,14 +208,14 @@ int *CamadaDeEnlaceTransmissoraEnquadramentoContagemDeCaracteres(int quadro[]){
   int i_aux = 0;
   int tamanho_fluxo;
   int size = find_size(quadro);
-  int tam_quadro = 5;
-  int cinco_binario[8] = {0,0,0,0,0,1,0,1};
+  int tam_quadro = 4;
+
   int quatro_binario[8] = {0,0,0,0,0,1,0,0};
-  int tres_binario[8] = {0,0,0,0,0,0,1,1};
-  int dois_binario[8] = {0,0,0,0,0,0,1,0};
-  int um_binario[8] = {0,0,0,0,0,0,0,1};
+  int tres_binario[8] =   {0,0,0,0,0,0,1,1};
+  int dois_binario[8] =   {0,0,0,0,0,0,1,0};
+
   int num_quadros = (size/((tam_quadro -1)*8));
-  int resto = (size%((tam_quadro -1)*8));
+  int resto = ((size%((tam_quadro -1)*8))/8);
 
   for(i = 0; i < size; i++){
     printf("%d", quadro[i]);
@@ -94,122 +224,123 @@ int *CamadaDeEnlaceTransmissoraEnquadramentoContagemDeCaracteres(int quadro[]){
 
   if( resto == 0){
 
-    tamanho_fluxo = size + (8 * num_quadros);
+    tamanho_fluxo = (size + (8 * num_quadros));
 
   } else {
 
-    tamanho_fluxo = size + (8 * num_quadros) + 8;
+    tamanho_fluxo = ((size) + (8 * (num_quadros + 1) ));
 
   }
+
+  printf("\n\ntamanho de fluxo: %d\n\n", tamanho_fluxo); 
 
   int *fluxoCodificado;
   fluxoCodificado = new (nothrow) int[tamanho_fluxo];
 
+  printf("\n\nresto: %d\n\n", resto); 
+  printf("\n\n num de quadros: %d\n\n", num_quadros); 
+
+  int quantidade_total_quadros;
+  
   if(resto == 0){
+    quantidade_total_quadros = (size/24); 
+  }
+  else{
+    quantidade_total_quadros = (size/24) + 1;
+  }
 
-    i = 0;
-    x = 0;
-    while(i < tamanho_fluxo){
+  int *aux; 
+  aux = new (nothrow) int[quantidade_total_quadros];
 
-      if(x == 0){
+  for(x = 0 ; x < quantidade_total_quadros ; x++){
+    if((x == quantidade_total_quadros - 1) && (resto != 0)){
 
-        for(j = 0; j < 8; j++){
+      aux[x] = resto; 
 
-          fluxoCodificado[j+i] = cinco_binario[j];
+    }else{
 
-        }
-        x = 1;
-        i = i + 8;
-
-      } else if(x == 1){
-
-        for(cont = 0; cont < 32;  cont++){
-
-          fluxoCodificado[cont+i] = quadro[cont+i_aux];
-
-        }
-        i = i+32;
-        x = 0;
-        i_aux = i_aux + 32;
-      }
-
+      aux[x] = 3; 
+    
     }
+    
+  }
 
-  } else if((resto != 0) && (num_quadros != 0)) {
+  printf("\n\nAUX:"); 
+  for(x = 0 ; x < quantidade_total_quadros ; x++){
+    printf("%d", aux[x]); 
+  }
+  printf("\n"); 
+
+  int k = 0; 
 
     i = 0;
     x = 0;
-    int cont_quadr = 0;
     while(i < tamanho_fluxo){
 
       if(x == 0){
 
-        for(j = 0; j < 8; j++){
-
-          fluxoCodificado[j+i] = cinco_binario[j];
-
-        }
-        x = 1;
-        cont_quadr++;
-        i = i + 8;
-
-      } else if(x == 1){
-
-        for(cont = 0; cont < 32;  cont++){
-
-          fluxoCodificado[cont+i] = quadro[cont+i_aux];
-
-        }
-        i = i+32;
-        x = 0;
-        i_aux = i_aux + 32;
-      }
-      if(cont_quadr == num_quadros){
-        if(resto == 3){
+        if(aux[k] == 3){
 
           for(j = 0; j < 8; j++){
 
             fluxoCodificado[j+i] = quatro_binario[j];
 
           }
-          i = i+8;
-          for(cont = 0; cont < 24;  cont++){
 
-            fluxoCodificado[cont+i] = quadro[cont+i_aux];
-
-          }
         }
-        if(resto == 2){
+        if(aux[k] == 2){
 
           for(j = 0; j < 8; j++){
 
             fluxoCodificado[j+i] = tres_binario[j];
 
           }
-          i = i+8;
-          for(cont = 0; cont < 16;  cont++){
 
-            fluxoCodificado[cont+i] = quadro[cont+i_aux];
+        }
+
+        if(aux[k] == 1){
+
+          for(j = 0; j < 8; j++){
+
+            fluxoCodificado[j+i] = dois_binario[j];
 
           }
-        }  if(resto == 1){
 
-            for(j = 0; j < 8; j++){
+        }
 
-              fluxoCodificado[j+i] = dois_binario[j];
+        x = 1;
+        i = i + 8;
 
-            }
-            i = i+8;
-            for(cont = 0; cont < 8;  cont++){
+      } 
+      if(x == 1){
 
-              fluxoCodificado[cont+i] = quadro[cont+i_aux];
+        for(cont = 0; cont < (aux[k]*8) ;  cont++){
 
-            }
-          }
+          fluxoCodificado[cont+i] = quadro[cont+i_aux];
+
+        }
+        i = i+(aux[k]*8);
+        x = 0;
+        i_aux = i_aux + (aux[k]*8);
+
       }
-    }
 
-  }
+      k++; 
+      
+    }
+  
+
+// 00000100 011010000110000101110100 00000100 011100110111010101101110 00000010 01100101
+//          011010000110000101110100          011100110111010101101110          01100101
+
+
+  printf("RESULTADO AQUIIIIIII :)\n\n"); 
+
+  for(x=0; x < tamanho_fluxo ; x++){
+
+    printf("%d", fluxoCodificado[x]);
+
+  } 
 
 
   fluxoCodificado[tamanho_fluxo] = 2;
@@ -226,27 +357,34 @@ int *CamadaDeEnlaceTransmissoraEnquadramentoContagemDeCaracteres(int quadro[]){
 
 void CamadaEnlaceDadosReceptora(int quadro[]){
 
+  int *quadro_novo; 
+
   // tira do enquadramento
-  CamadaDeEnlaceReceptoraEnquadramento(quadro);
+  quadro_novo = CamadaDeEnlaceReceptoraEnquadramento(quadro);
 
   // passa adiante para a camada receptora transformar os bits em strings
   CamadaDeAplicacaoReceptora(quadro);
 
 }
 
-void CamadaDeEnlaceReceptoraEnquadramento(int quadro[]){
+int *CamadaDeEnlaceReceptoraEnquadramento(int quadro[]){
 
   printf("\n\nrecepção, enlace\n\n");
 
   int tipoDeEnquadramento = ENQUADRAMENTO;
 
+  int *quadroEnquadrado;
+
   switch(tipoDeEnquadramento){
     case 0:
+
+    printf("passeando pela recepção enlace :)");
+
     //quadroEnquadrado = CamadaDeEnlaceReceptoraEnquadramentoContagemDeCaracteres(quadro);
     break;
 
     case 1:
-    //quadroEnquadrado = CamadaDeEnlaceReceptoraEnquadramentoInsercaoDeBytes(quadro);
+    quadroEnquadrado = CamadaDeEnlaceReceptoraEnquadramentoInsercaoDeBytes(quadro);
     break;
 
     case 2:
@@ -255,7 +393,66 @@ void CamadaDeEnlaceReceptoraEnquadramento(int quadro[]){
 
   }
 
+  return quadroEnquadrado; 
+
 
 }
 
 // implementa a retirada dos enquadramentos aqui
+
+int *CamadaDeEnlaceReceptoraEnquadramentoInsercaoDeBytes(int quadro[]){
+
+  int size = find_size(quadro);
+  // flag 00001111
+  
+  int i = 0;
+  int x = 0; 
+  int i_aux = 0; 
+
+
+  int aux[8]; 
+
+  int *FluxoFinal;
+  FluxoFinal = new (nothrow) int[size];
+
+  while(i < size){
+
+    for(x = 0; x < 8 ; x++){
+
+      aux[x] = quadro[x + i]; 
+
+    }
+
+
+    if( (aux[0] == 0) && (aux[1] == 0) && (aux[2] == 0) && (aux[3] == 0)
+        && (aux[4] == 1) && (aux[5] == 1) && (aux[6] == 1) && (aux[7] == 1)){
+
+          // é flag
+
+    }  else{
+
+      for(x = 0; x < 8 ; x++){
+
+        FluxoFinal[x + i_aux] = aux[x]; 
+
+      }
+
+      i_aux = i_aux + 8; 
+
+    }
+
+
+    i = i + 8; 
+
+  }
+  
+  printf("\n\nresultado do q fizemos:\n\n");
+  for(x = 0; x< i_aux; x++){
+    printf("%d", FluxoFinal[x]); 
+  }
+  printf("\n\n");
+
+  FluxoFinal[size] = 2;
+
+  return FluxoFinal; 
+}
