@@ -18,7 +18,7 @@ Para limpar o diretório, rode:
 
 > make clean
 
-Para mudar o tipo de codificação/decodificação, no arquivo CamadaFisica.h existe um #DEFINE que serve como atalho. Implementou-se em C++ um simulador de camada física que utiliza as codificações/decodificações Binária (opção 0), Manchester (opção 1) e Manchester Diferencial (opção 2). Para mudar o enquadramento...!!!!!!!!!
+Para mudar o tipo de codificação/decodificação, no arquivo CamadaFisica.h existe um #DEFINE que serve como atalho. Implementou-se em C++ um simulador de camada física que utiliza as codificações/decodificações Binária (opção 0), Manchester (opção 1) e Manchester Diferencial (opção 2). Para mudar o tipo de enquadramento, no arquivo CamadaEnlace.h existe um #DEFINE que serve como atalho. Implementou-se em C++ um simulador de camada de enlace que utiliza os enquadramentos com Contagem de Caracteres (opção 0), com a Inserção de Bytes (opção 1) e com a Inserção de Bits (opção 2).
 
 
 # Alunos
