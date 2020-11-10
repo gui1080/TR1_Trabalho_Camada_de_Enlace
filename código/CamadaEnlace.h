@@ -29,3 +29,4 @@ int *CamadaDeEnlaceTransmissoraEnquadramentoInsercaoDeBits(int *quadro);
 // Decodificação
 int *CamadaDeEnlaceReceptoraEnquadramentoInsercaoDeBytes(int *quadro);
 int *CamadaDeEnlaceReceptoraEnquadramentoContagemDeCaracteres(int *quadro);
+int *CamadaDeEnlaceReceptoraEnquadramentoInsercaoDeBits(int *quadro);
