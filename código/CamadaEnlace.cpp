@@ -363,7 +363,7 @@ void CamadaEnlaceDadosReceptora(int quadro[]){
   quadro_novo = CamadaDeEnlaceReceptoraEnquadramento(quadro);
 
   // passa adiante para a camada receptora transformar os bits em strings
-  CamadaDeAplicacaoReceptora(quadro);
+  CamadaDeAplicacaoReceptora(quadro_novo);
 
 }
 
@@ -380,7 +380,7 @@ int *CamadaDeEnlaceReceptoraEnquadramento(int quadro[]){
 
     printf("passeando pela recepção enlace :)");
 
-    //quadroEnquadrado = CamadaDeEnlaceReceptoraEnquadramentoContagemDeCaracteres(quadro);
+    quadroEnquadrado = CamadaDeEnlaceReceptoraEnquadramentoContagemDeCaracteres(quadro);
     break;
 
     case 1:
@@ -455,4 +455,105 @@ int *CamadaDeEnlaceReceptoraEnquadramentoInsercaoDeBytes(int quadro[]){
   FluxoFinal[size] = 2;
 
   return FluxoFinal; 
+}
+
+int *CamadaDeEnlaceReceptoraEnquadramentoContagemDeCaracteres(int quadro[]){
+
+
+  int size = find_size(quadro);
+  
+  int i = 0;
+  int x = 0; 
+  int i_aux = 0; 
+
+
+  int aux[8]; 
+
+  int k = 0; 
+
+  int *FluxoFinal;
+  FluxoFinal = new (nothrow) int[size];
+
+  while(i < size){
+
+    // pegamos os primeiros 8 bits
+
+    for(x = 0; x < 8 ; x++){
+
+      aux[x] = quadro[i + x]; 
+
+    }
+
+    // atualizamos em qual posição estamos no quadro
+
+    i = i + 8;
+
+    // definimos qual o tamanho do bloco que vai para o fluxo final
+
+    if((k == 0)){
+      if( (aux[0] == 0) && (aux[1] == 0) && (aux[2] == 0) && (aux[3] == 0)
+          && (aux[4] == 0) && (aux[5] == 1) && (aux[6] == 0) && (aux[7] == 0)){
+
+        // é o cabeçalho de um quadro completo
+
+        k = 3; 
+
+      }
+
+      if((aux[0] == 0) && (aux[1] == 0) && (aux[2] == 0) && (aux[3] == 0)
+          && (aux[4] == 0) && (aux[5] == 0) && (aux[6] == 1) && (aux[7] == 1)){
+
+        // restam 2 bytes para passarmos
+
+        k = 2; 
+
+      }
+
+      if((aux[0] == 0) && (aux[1] == 0) && (aux[2] == 0) && (aux[3] == 0)
+          && (aux[4] == 0) && (aux[5] == 0) && (aux[6] == 1) && (aux[7] == 0)){
+
+        // resta 1 byte para passar
+
+        k = 1; 
+
+      }
+
+    }
+
+    // copia a "k" quantidade de bytes pro fluxo
+
+    for(x = 0; x < (8*k) ; x++){
+
+        FluxoFinal[x + i_aux] = quadro[x + i]; 
+
+    }
+
+    // atualiza a posição que estamos no quadro e no fluxo final
+
+    i_aux = i_aux + (8*k); 
+    i = i + (8*k);
+
+    k = 0; 
+
+    // dps o fluxo final tem um tamanho igual a i_aux
+
+    // para cada (k*8) posições q o fluxo final anda, o quadro anda (k*8 + 8),jogando o header fora
+
+  }
+  
+  printf("\n\nresultado do q fizemos (inserindo header):\n\n");
+  
+  for(x = 0; x< i_aux; x++){
+
+    printf("%d", FluxoFinal[x]); 
+  
+  }
+
+  printf("\n\n");
+
+  FluxoFinal[i_aux] = 2;
+
+  return FluxoFinal; 
+
+
 }

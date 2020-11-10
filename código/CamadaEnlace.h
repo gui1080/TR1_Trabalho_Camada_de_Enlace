@@ -27,3 +27,4 @@ int *CamadaDeEnlaceTransmissoraEnquadramentoInsercaoDeBytes(int *quadro);
 
 // Decodificação
 int *CamadaDeEnlaceReceptoraEnquadramentoInsercaoDeBytes(int *quadro);
+int *CamadaDeEnlaceReceptoraEnquadramentoContagemDeCaracteres(int *quadro);
