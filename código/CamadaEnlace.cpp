@@ -18,6 +18,8 @@ using namespace std;
 // https://github.com/gui1080/TR1_Trabalho_Camada_de_Enlace
 // (repositório privado na entrega do trabalho)
 
+//-----------------------------------------------------
+
 void CamadaEnlaceDadosTransmissora(int quadro[])
 {
   // se recebe o fluxo bruto da string transformada em um vetor de 0 e 1
@@ -89,6 +91,9 @@ int *CamadadeEnlaceTransmissoraEnquadramento(int quadro[])
   return quadroEnquadrado;
 }
 
+// Enquadramentos
+//-----------------------------------------------------
+
 int *CamadaDeEnlaceTransmissoraEnquadramentoInsercaoDeBits(int quadro[])
 {
 
@@ -125,6 +130,9 @@ int *CamadaDeEnlaceTransmissoraEnquadramentoInsercaoDeBits(int quadro[])
     tamanho_fluxo = size + (((size/40) * 16) + 16) + divisao;
   }
 */
+// 01111110 0011111 0 10011111 0 1 01111110
+//          0011111   10011111   1
+
 
   int quantidade_total_quadros;
 
@@ -155,11 +163,13 @@ int *CamadaDeEnlaceTransmissoraEnquadramentoInsercaoDeBits(int quadro[])
     {
 
       vetor_aux[x] = resto;
+
     }
     else
     {
 
       vetor_aux[x] = 5;
+
     }
   }
 
@@ -175,12 +185,13 @@ int *CamadaDeEnlaceTransmissoraEnquadramentoInsercaoDeBits(int quadro[])
   int k = 0;
   int cont_um = 0;
 
+  // øøøø
+
   while (i < size)
   {
 
     for (x = 0; x < 8; x++)
     {
-
       fluxoCodificado[i_aux + x] = flag[x];
     }
 
@@ -189,22 +200,15 @@ int *CamadaDeEnlaceTransmissoraEnquadramentoInsercaoDeBits(int quadro[])
     for (y = 0; y < (vetor_aux[k] * 8); y++)
     {
 
-      if (quadro[i + y] && quadro[i + y - 1] == 1)
-      {
-        cont_um++;
+      if( y == 4){
+      if ((quadro[i + y] == 1) && (quadro[i + y - 1] == 1) && (quadro[i + y - 2] == 1) && (quadro[i + y - 3] == 1) && (quadro[i + y - 4] == 1))
+        {
+                  
+          fluxoCodificado[i_aux + y] = 0;
+          i_aux++;
+        }
       }
-      else
-      {
-        cont_um = 0;
-      }
-
       fluxoCodificado[i_aux + y] = quadro[i + y];
-
-      if (cont_um == 4)
-      {
-        i_aux++;
-        fluxoCodificado[i_aux + y] = 0;
-      }
     }
 
     cont_um = 0;
@@ -238,9 +242,23 @@ int *CamadaDeEnlaceTransmissoraEnquadramentoInsercaoDeBits(int quadro[])
   //         0011111  1001111110011111100111111001111110011111100111111
   //01111110 00111110 1001111101001111101001111101001111101011111100111111000111110100111110101111110
 
+  // 01111110 0011111 0 10011111 0 10011111 0 10011111 0 10011111 0 1 01111110
+  //          0011111   10011111   10011111   10011111   10011111   1
+
+
   fluxoCodificado[i_aux] = 2;
 
-  return fluxoCodificado;
+  int *FluxoLegal; 
+
+  FluxoLegal = new (nothrow) int[i_aux];
+
+  for(int f = 0; f < i_aux ; f++){
+    FluxoLegal[f] = fluxoCodificado[f];  
+  }
+
+  FluxoLegal[i_aux] = 2; 
+
+  return FluxoLegal;
 }
 
 int *CamadaDeEnlaceTransmissoraEnquadramentoInsercaoDeBytes(int quadro[])
@@ -526,7 +544,7 @@ int *CamadaDeEnlaceTransmissoraEnquadramentoContagemDeCaracteres(int quadro[])
   return fluxoCodificado;
 }
 
-// implementa esses enquadramentos aqui
+//-----------------------------------------------------
 
 void CamadaEnlaceDadosReceptora(int quadro[])
 {
@@ -612,6 +630,9 @@ int *CamadaDeEnlaceReceptoraEnquadramento(int quadro[])
   return quadroEnquadrado;
 }
 
+// Desenquadramentos
+//-----------------------------------------------------
+
 int *CamadaDeEnlaceReceptoraEnquadramentoInsercaoDeBits(int quadro[])
 {
   int size = find_size(quadro);
@@ -649,6 +670,7 @@ int *CamadaDeEnlaceReceptoraEnquadramentoInsercaoDeBits(int quadro[])
     {
 
       // é flag
+      
     }
     else
     {
@@ -706,13 +728,10 @@ int *CamadaDeEnlaceReceptoraEnquadramentoInsercaoDeBits(int quadro[])
   return FluxoFinal;
 }
 
-// implementa a retirada dos enquadramentos aqui
-
 int *CamadaDeEnlaceReceptoraEnquadramentoInsercaoDeBytes(int quadro[])
 {
 
   int size = find_size(quadro);
-  // flag 00001111
 
   int i = 0;
   int x = 0;
@@ -858,3 +877,5 @@ int *CamadaDeEnlaceReceptoraEnquadramentoContagemDeCaracteres(int quadro[])
 
   return FluxoFinal;
 }
+
+//-----------------------------------------------------

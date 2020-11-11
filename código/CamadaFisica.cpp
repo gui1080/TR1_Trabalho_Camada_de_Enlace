@@ -407,12 +407,17 @@ void MeioDeComunicacao(int fluxoBrutodeBits[])
 	int *fluxoBrutoDeBitsPontoA;
 	int *fluxoBrutoDeBitsPontoB;
 
+
 	fluxoBrutoDeBitsPontoA = new (nothrow) int[tamanho];
 	fluxoBrutoDeBitsPontoB = new (nothrow) int[tamanho];
+	
 
 	for (i = 0; i < tamanho; i++) // copia original pro A
 	{
 		fluxoBrutoDeBitsPontoA[i] = fluxoBrutodeBits[i];
+
+		printf("%d", fluxoBrutoDeBitsPontoA[i]); 
+
 	}
 
 	for (i = 0; i < tamanho; i++) // copia A pro B
@@ -428,7 +433,6 @@ void MeioDeComunicacao(int fluxoBrutodeBits[])
 
 // DECODIFICAÇÃO
 //--------------------------------------------------------------------------------------------
-
 
 void CamadaFisicaReceptora(int quadro[])
 {
@@ -723,3 +727,5 @@ void AplicacaoReceptora(string mensagem)
 	// fim!
 
 }
+
+//-----------------------------------------------------
