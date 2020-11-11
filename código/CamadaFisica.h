@@ -9,7 +9,7 @@
 // https://github.com/gui1080/TR1_Trabalho_Camada_Fisica
 // (repositório privado na entrega do trabalho)
 
-#define CODIFICACAO 1
+#define CODIFICACAO 2
 // CODIFICACAO = 0 (Binária)
 // CODIFICACAO = 1 (Manchester)
 // CODIFICACAO = 2 (Manchester Diferencial)
@@ -19,6 +19,7 @@
 // funções auxiliares
 void converte(string mensagem, int* quadro, int pos);
 int find_size(int* quadro);
+int *simplifica(int* quadro[]);
 
 // simulador por parte do transmissor
 void CamadaDeAplicacaoTransmissora(string mensagem);
@@ -45,4 +46,3 @@ void CamadaDeAplicacaoReceptora(int* quadro);
 
 // simulação da aplicação final recebendo a mensagem enviada do transmissor
 void AplicacaoReceptora(string mensagem);
-

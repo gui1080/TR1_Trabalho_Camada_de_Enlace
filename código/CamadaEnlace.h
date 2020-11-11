@@ -11,7 +11,7 @@
 // (repositório privado na entrega do trabalho)
 
 
-#define ENQUADRAMENTO 2
+#define ENQUADRAMENTO 2  
 
 // Transmissão
 void CamadaEnlaceDadosTransmissora(int* quadro);
@@ -29,3 +29,6 @@ int *CamadaDeEnlaceTransmissoraEnquadramentoInsercaoDeBits(int *quadro);
 // Decodificação
 int *CamadaDeEnlaceReceptoraEnquadramentoInsercaoDeBytes(int *quadro);
 int *CamadaDeEnlaceReceptoraEnquadramentoContagemDeCaracteres(int *quadro);
+int *CamadaDeEnlaceReceptoraEnquadramentoInsercaoDeBits(int *quadro);
+
+
