@@ -16,7 +16,7 @@
 // Enquadramento 0 = Contagem de Caracteres
 // Enquadramento 1 = Inserção de Bytes
 // Enquadramento 2 = Inserção de Bits
-// esse define vai atualizar não apenas o enquadramento como também o desenquadramento, simplificando os testes 
+// esse define vai atualizar não apenas o enquadramento como também o desenquadramento, simplificando os testes
 
 // Transmissão
 //-----------------------------------------------------
@@ -41,4 +41,3 @@ int *CamadaDeEnlaceReceptoraEnquadramentoContagemDeCaracteres(int *quadro);
 int *CamadaDeEnlaceReceptoraEnquadramentoInsercaoDeBits(int *quadro);
 
 //-----------------------------------------------------
-

@@ -22,7 +22,7 @@ using namespace std;
 //--------------------------------------------------------------------------------------------
 
 int *simplifica(int quadro[]){
-		
+
 
 	int i = 0;
 	i = find_size(quadro);
@@ -35,23 +35,17 @@ int *simplifica(int quadro[]){
 
 	int j = 0;
 
-	cout << "simplificando" << endl; 
-
 	for (i = 0; i < tamanho_quadro; i = i + 2)
 	{
 
-		fluxoFinal[j] = quadro[i];
-
-		cout << fluxoFinal[j]; // tamanho = tamanho_mensagem_ascii
+		fluxoFinal[j] = quadro[i]; // tamanho = tamanho_mensagem_ascii
 
 		j++;
 	}
 
-	cout << endl << endl;
+	fluxoFinal[tamanho_mensagem_ascii] = 2;
 
-	fluxoFinal[tamanho_mensagem_ascii] = 2; 
-
-	return fluxoFinal; 
+	return fluxoFinal;
 
 }
 
@@ -410,13 +404,13 @@ void MeioDeComunicacao(int fluxoBrutodeBits[])
 
 	fluxoBrutoDeBitsPontoA = new (nothrow) int[tamanho];
 	fluxoBrutoDeBitsPontoB = new (nothrow) int[tamanho];
-	
+
 
 	for (i = 0; i < tamanho; i++) // copia original pro A
 	{
 		fluxoBrutoDeBitsPontoA[i] = fluxoBrutodeBits[i];
 
-		printf("%d", fluxoBrutoDeBitsPontoA[i]); 
+		printf("%d", fluxoBrutoDeBitsPontoA[i]);
 
 	}
 
@@ -437,7 +431,7 @@ void MeioDeComunicacao(int fluxoBrutodeBits[])
 void CamadaFisicaReceptora(int quadro[])
 {
 
-	cout << "\033[1;34mCamada Fisica Receptora\033[0m\n";
+	cout << "\033[1;34m\nCamada Fisica Receptora\033[0m\n";
 
 	int tipoDeDecodificacao = CODIFICACAO; // utilizou-se este define para facilitar a mudança entre codificações e decodificações
 
@@ -445,7 +439,7 @@ void CamadaFisicaReceptora(int quadro[])
 	i = find_size(quadro);
 	int *fluxoBrutoDeBits;
 	int *fluxoFinal;
-	int z = (i/2); 
+	int z = (i/2);
 
 	fluxoBrutoDeBits = new (nothrow) int[i]; // alocação dinâmica
 	fluxoFinal = new (nothrow) int[z];
@@ -456,14 +450,9 @@ void CamadaFisicaReceptora(int quadro[])
 		case 0:
 
 		fluxoBrutoDeBits = CamadaFisicaReceptoraDecodificacaoBinaria(quadro);
-		fluxoFinal = simplifica(fluxoBrutoDeBits); 
+		fluxoFinal = simplifica(fluxoBrutoDeBits);
 
 		cout << "\033[1;35mDecodificacao Binaria: \033[0m\n";
-		for (int j = 0; j < i; j++)
-		{
-			cout << fluxoBrutoDeBits[j];
-		}
-		cout << endl << endl;
 
 		break;
 
@@ -473,11 +462,6 @@ void CamadaFisicaReceptora(int quadro[])
 		fluxoFinal = simplifica(fluxoBrutoDeBits);
 
 		cout << "\033[1;35mDecodificacao Manchester: \033[0m\n";
-		for (int j = 0; j < i; j++)
-		{
-			cout << fluxoBrutoDeBits[j];
-		}
-		cout << endl << endl;
 
 		break;
 		case 2:
@@ -486,14 +470,16 @@ void CamadaFisicaReceptora(int quadro[])
 		fluxoFinal = simplifica(fluxoBrutoDeBits);
 
 		cout << "\033[1;35mDecodificacao Manchester Diferencial: \033[0m\n";
-		for (int j = 0; j < i; j++)
-		{
-			cout << fluxoBrutoDeBits[j];
-		}
-		cout << endl << endl;
 
 		break;
 	}
+
+	i = find_size(fluxoFinal);
+	for (int j = 0; j < i; j++)
+	{
+		cout << fluxoFinal[j];
+	}
+	cout << endl << endl;
 
 	//trabalho 1
 	//CamadaDeAplicacaoReceptora(fluxoBrutoDeBits); // passa a diante o fluxo decodificado
@@ -655,8 +641,6 @@ void CamadaDeAplicacaoReceptora(int quadro[])
 	cout << "\033[1;34mCamada de Aplicação Receptora\033[0m\n";
 	// transformando em string
 
-	
-
 	int i = 0;
 	i = find_size(quadro);
 	int tamanho_quadro = i;
@@ -668,11 +652,9 @@ void CamadaDeAplicacaoReceptora(int quadro[])
 
 	int j = 0;
 
-	printf("CAMADA DE APLICAÇÃO RECEPTORA!!!!,\n tamanho do quadro: %d \n", i); 
-
 	for (i = 0; i < tamanho_quadro; i++)
 	{
-		cout << quadro[i]; 
+		cout << quadro[i];
 	}
 
 	cout << endl << endl;
@@ -708,9 +690,6 @@ void CamadaDeAplicacaoReceptora(int quadro[])
 
 		mensagem.push_back((char)decimal);
 	}
-
-	printf("msgn aqui jkjkjk"); 
-	cout<<mensagem<<endl; 
 
 	AplicacaoReceptora(mensagem); // passamos a string a diante
 }

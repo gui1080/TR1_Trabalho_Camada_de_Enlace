@@ -23,7 +23,7 @@ int main(void){
 
 } // fim do metodo main
 
-// APLICAÇÃO QUE TRANSMITE 
+// APLICAÇÃO QUE TRANSMITE
 //--------------------------------------------------------------------------------------------
 
 void AplicacaoTransmissora(void){
@@ -34,7 +34,7 @@ void AplicacaoTransmissora(void){
 
   getline(cin,mensagem);
 
-  cout << "\033[1;32mMensagem a ser transmitida: \033[0m";
+  cout << "\033[1;32m\nMensagem a ser transmitida: \033[0m";
 	cout << mensagem << endl << endl;
 
   // chama a proxima camada
